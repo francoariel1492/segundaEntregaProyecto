@@ -1,9 +1,8 @@
 const { Router } = require('express');
 
 const router = Router();
-
 const {ProductManager} = require("../dao/fsClassManagers/productsClass/productManager");
-const productsJson = new ProductManager('./src/dao/fsClassManagers/productsClass/db/products.json');
+const productsJson = new ProductManager('./src/files/products.json');
 
 router.get('/', async (req, res) => {
     const getAll = await productsJson.getProducts();
@@ -109,6 +108,8 @@ router.delete('/:id', async (req, res) => {
         res.status(200).json({ mesagge: getById });
     }
 });
+
+
 
 
 module.exports = router;

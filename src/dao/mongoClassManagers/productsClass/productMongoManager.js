@@ -47,7 +47,6 @@ class MongoProductManager{
             return error;
         }
     }
-
     async updateProduct(id,product){
         try {
             const getProductByIdMongo = await Product.findByIdAndUpdate(id,product);
@@ -57,6 +56,14 @@ class MongoProductManager{
             return error;
         }
     }
+    async addProductsToDB(productsJson) {
+        try {
+          const newProducts = await Product.insertMany(productsJson)
+          return newProducts
+        } catch (error) {
+          return error
+        }
+      }
 }
 
 module.exports = {MongoProductManager};

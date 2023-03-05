@@ -16,7 +16,6 @@ const productSchema = new mongoose.Schema({
     status: Boolean,
     category: String,
     idd: Number
-
 });
 
 productSchema.plugin(mongoosePaginate);

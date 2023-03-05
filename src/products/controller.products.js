@@ -1,5 +1,7 @@
 const { Router } = require('express');
+const { ProductManager } = require('../dao/fsClassManagers/productsClass/productManager');
 const { MongoProductManager } = require('../dao/mongoClassManagers/productsClass/productMongoManager');
+const pManager = new ProductManager('./src/files/products.json')
 const productsMongo = new MongoProductManager();
 const router = Router();
 
@@ -180,5 +182,12 @@ router.delete('/:id', async (req, res) => {
     global.io.emit('statusProductsList', products);
     res.status(200).json({ mesagge: getById });
 });
+
+router.post('/json', async (req, res) => {
+    const pJson = await pManager.getProducts()
+    const response = await productsMongo.addProductsToDB(pJson)
+    res.json({ message: response })
+  })
+
 
 module.exports = router;
