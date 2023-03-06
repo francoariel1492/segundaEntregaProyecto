@@ -1,15 +1,16 @@
-const { Router } = require('express');
-const router = Router();
+// const { Router } = require('express');
+// const router = Router();
 
-const { MongoProductManager } = require('../dao/mongoClassManagers/productsClass/productMongoManager');
-const productsMongo = new MongoProductManager();
 
-router.get('/', async (req, res) => {
-    const products = await productsMongo.getProducts();
-    const getAll = products;
+// const { ProductManager } = require('../dao/Product.dao');
+// const productManager = new ProductManager()
 
-    global.io.emit('productsList', products);
-    res.render('realTimeProducts.handlebars',  {getAll} );
-});
+// router.get('/', async (req, res) => {
+//     const products = await productManager.getProducts();
+//     const getAll = products;
 
-module.exports = router;
+//     global.io.emit('productsList', products);
+//     res.render('realTimeProducts.handlebars',  {getAll} );
+// });
+
+// module.exports = router;

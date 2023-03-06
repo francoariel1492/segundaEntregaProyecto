@@ -1,32 +1,23 @@
-const productsController = require('../products/controller.products');
-const cartsController = require('../carts/controller.carts');
-const fsProductsController = require('../products/controller.fs.products');
-const fsCartsController = require('../carts/controller.fs.carts ');
-const realTimeProductsController = require('../realTime/controller.realTimeProducts');
-const viewsController = require('../chat/controller.chat')
-const usersController = require('../users/controller.users');
-
-//----------------
-const authController = require('../auth/controllers.auth');
-const cookiesController = require('../cookies/controller.cookies');
-const sessionController = require('../session/controller.session');
 const viewsTemplateController = require('../viewsTemplate/controller.viewsTemplate')
+const authController = require('../auth/controller.auth')
+const usersController = require('../users/controller.users')
+const productsController = require('../products/controller.products')
+const cookiesController = require('../cookies/controller.cookies')
+const sessionController = require('../session/controller.session')
+// const realTimeProductsController = require('../realTime/controller.realTimeProducts')
+const viewsController = require('../chat/controller.chat')
+const cartsController = require('../carts/controller.carts')
 
+const router = app => {
+  app.use('/', viewsTemplateController)
+  app.use('/auth', authController)
+  app.use('/users', usersController)
+  app.use('/cookies', cookiesController)
+  app.use('/session', sessionController)
+  app.use('/chat', viewsController)
+  // app.use('/realTimeProducts', realTimeProductsController);
+  app.use('/api/products', productsController)
+  app.use('/api/carts', cartsController)
+}
 
-const router = (app) => {
-    app.use('/chat', viewsController)
-    app.use('/api/products', productsController);
-    app.use('/api/carts', cartsController);
-    app.use('/api/fs/products', fsProductsController);
-    app.use('/api/fs/carts', fsCartsController);
-    app.use('/realTimeProducts', realTimeProductsController);
-
-
-    app.use('/', viewsTemplateController);
-    app.use('/auth', authController);
-    app.use('/users', usersController);
-    app.use('/cookies', cookiesController);
-    app.use('/session', sessionController);
-};
-
-module.exports = router;
+module.exports = router

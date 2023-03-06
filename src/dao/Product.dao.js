@@ -1,6 +1,6 @@
-const Product = require("../../models/products.model");
+const Product = require("../models/products.model");
 
-class MongoProductManager{
+class ProductManager{
 
     async getProducts(filter,condicionesQuery){
         try {
@@ -56,6 +56,7 @@ class MongoProductManager{
             return error;
         }
     }
+    
     async addProductsToDB(productsJson) {
         try {
           const newProducts = await Product.insertMany(productsJson)
@@ -64,6 +65,8 @@ class MongoProductManager{
           return error
         }
       }
+
+
 }
 
-module.exports = {MongoProductManager};
+module.exports = {ProductManager};

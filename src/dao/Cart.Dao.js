@@ -1,8 +1,6 @@
-const Cart = require("../../models/carts.model");
+const Cart = require("../models/carts.model");
 
-
-
-class MongoCartManager {
+class CartManager {
 
     async getCarts() {
         try {
@@ -107,4 +105,4 @@ class MongoCartManager {
     }
 }
 
-module.exports = { MongoCartManager };
+module.exports = { CartManager };

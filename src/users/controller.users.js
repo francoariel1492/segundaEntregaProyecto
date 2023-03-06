@@ -1,37 +1,28 @@
 const { Router } = require('express')
-const UserDao = require('../dao/mongoClassManagers/userClass/User.Dao')
-const FilesDao = require('../dao/Files.dao')
-const User = new UserDao()
-const UserManager = new FilesDao('Users.json')
+const User = require('../models/user.model')
+
 const router = Router()
 
-
-router.get('/', async (req, res) => {
-  const users = await User.find()
-  res.json({ message: users })
-})
-
 router.post('/', async (req, res) => {
-  const users = await UserManager.loadItems()
-  const response = await User.insertMany(users)
-  res.json({ message: response })
-})
-
-router.patch('/:id', async (req, res) => {
   try {
-    const { id } = req.params
-    const { product } = req.body
-    const response = await User.updateOne(id, product)
+    const { first_name, last_name, age, email, password } = req.body
 
-    res.json({ message: response })
+    const newUserInfo = {
+      first_name,
+      last_name,
+      age,
+      email,
+      password
+    }
+
+    const newUser = await User.create(newUserInfo)
+
+    res.status(201).json({ message: newUser })
   } catch (error) {
-    res.status(500).json({ error })
+    console.log(error)
+    if (error.code === 11000) return res.status(400).json({ error: 'El usuario ya existe - controler.users' })
+    res.status(500).json({ error: 'Internal server error' })
   }
-})
-
-router.delete('/', async (req, res) => {
-  const response = await User.deleteMany()
-  res.json({ message: response })
 })
 
 module.exports = router

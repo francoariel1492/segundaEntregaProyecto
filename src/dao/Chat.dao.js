@@ -1,6 +1,6 @@
-const Chat = require("../../models/chat.model");
+const Chat = require("../models/chat.model");
 
-class MongoChatManager {
+class ChatManager {
 
     async saveMesagge(mesagge) {
         try {
@@ -25,4 +25,4 @@ class MongoChatManager {
 
 }
 
-module.exports = { MongoChatManager };
+module.exports = { ChatManager };

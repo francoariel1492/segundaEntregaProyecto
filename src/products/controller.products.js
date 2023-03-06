@@ -1,8 +1,9 @@
 const { Router } = require('express');
-const { ProductManager } = require('../dao/fsClassManagers/productsClass/productManager');
-const { MongoProductManager } = require('../dao/mongoClassManagers/productsClass/productMongoManager');
-const pManager = new ProductManager('./src/files/products.json')
-const productsMongo = new MongoProductManager();
+
+const { ProductManager } = require('../dao/Product.dao');
+const productManager = new ProductManager()
+const FilesDao = require('../dao/files.dao');
+const filesDao = new FilesDao('products.json')
 const router = Router();
 
 router.get('/', async (req, res) => {
@@ -66,10 +67,10 @@ router.get('/', async (req, res) => {
             limit: limit,
             sort: { price: sort }
         };
-        //console.log(filter)
 
 
-        const products = await productsMongo.getProducts(filter, condicionesQery);
+
+        const products = await productManager.getProducts(filter, condicionesQery);
         let nextLink;
         let prevLink;
         if (products.hasPrevPage == false) {
@@ -99,8 +100,7 @@ router.get('/', async (req, res) => {
             nextLink: nextLink,
             linkMold: linkMold
         };
-        res.status(500).render('products',{respuestaInfo: respuestaInfo}); 
-        //res.status(200).json({ mesagge: { respuestaInfo } });
+        res.status(500).render('products',{respuestaInfo}); 
 
     } catch (error) {
         res.status(500).json({ mesagge: { error } });
@@ -110,10 +110,9 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     const productId = req.params.id;
-    const getById = await productsMongo.getProductById(productId);
-    //console.log(getById)
+    const getById = await productManager.getProductById(productId);
     res.status(500).render('productID',getById);
-    //res.status(200).json({ mesagge: getById });
+
 });
 
 router.post('/', async (req, res) => {
@@ -134,9 +133,9 @@ router.post('/', async (req, res) => {
         const verifyExistenceUndefined = Object.values(newProduct).indexOf(undefined);
 
         if (verifyExistenceUndefined === -1) {
-            const createdProduct = await productsMongo.addProduct(newProduct);
-            const products = await productsMongo.getProducts();
-            global.io.emit('statusProductsList', products);
+            const createdProduct = await productManager.addProduct(newProduct);
+            const products = await productManager.getProducts();
+            // global.io.emit('statusProductsList', products);
             res.json({ mesagge: createdProduct });
         }
         else {
@@ -165,9 +164,8 @@ router.put('/:id', async (req, res) => {
     const verifyExistenceUndefined = Object.values(newUpdatedProduct).indexOf(undefined);
 
     if (verifyExistenceUndefined === -1) {
-        const UpdatedProduct = await productsMongo.updateProduct(productId, newUpdatedProduct);
-        const products = await productsMongo.getProducts();
-        global.io.emit('statusProductsList', products);
+        const UpdatedProduct = await productManager.updateProduct(productId, newUpdatedProduct);
+        const products = await productManager.getProducts();
         res.json({ mesagge: UpdatedProduct });
     }
     else {
@@ -177,15 +175,14 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
     const productId = req.params.id;
-    const getById = await productsMongo.deleteById(productId);
-    const products = await productsMongo.getProducts();
-    global.io.emit('statusProductsList', products);
+    const getById = await productManager.deleteById(productId);
+    const products = await productManager.getProducts();
     res.status(200).json({ mesagge: getById });
 });
 
 router.post('/json', async (req, res) => {
-    const pJson = await pManager.getProducts()
-    const response = await productsMongo.addProductsToDB(pJson)
+    const pJson = await filesDao.loadItems()
+    const response = await productManager.addProductsToDB(pJson)
     res.json({ message: response })
   })
 
