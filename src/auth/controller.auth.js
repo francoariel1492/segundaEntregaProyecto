@@ -11,11 +11,18 @@ router.post('/', async (req, res) => {
 
     if (!user || user.password !== password) return res.status(400).json({ error: 'El usuario y la contraseña no coinciden - controller.auth' })
 
-
-    req.session.user = {
-      first_name: user.first_name,
-      last_name: user.last_name,
-      email: user.email
+      req.session.user = {
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        // role: 'admin'
+      }
+      console.log(req.session.user.email)
+    if(email === 'adminCoder@coder.com' && password === 'adminCod3r123'){
+      req.session.user.role = 'admin'
+      }
+      else{
+        req.session.user.role = 'user'
     }
     res.redirect('/api/products')
   } catch (error) {
