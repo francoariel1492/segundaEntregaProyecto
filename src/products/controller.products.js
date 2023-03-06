@@ -7,6 +7,7 @@ const filesDao = new FilesDao('products.json')
 const router = Router();
 
 router.get('/', async (req, res) => {
+
     try {
 
         let linkMold = req.protocol + '://' + req.get('host') + '/api/products/';
@@ -100,7 +101,8 @@ router.get('/', async (req, res) => {
             nextLink: nextLink,
             linkMold: linkMold
         };
-        res.status(500).render('products',{respuestaInfo}); 
+        const { user } = req.session
+        res.status(200).render('products',{respuestaInfo, user}); 
 
     } catch (error) {
         res.status(500).json({ mesagge: { error } });

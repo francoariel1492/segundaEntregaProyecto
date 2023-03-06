@@ -17,7 +17,7 @@ router.post('/', async (req, res) => {
       last_name: user.last_name,
       email: user.email
     }
-    res.redirect('/')
+    res.redirect('/api/products')
   } catch (error) {
     console.log(error)
     res.status(500).json({ error: 'Internal server error' })
