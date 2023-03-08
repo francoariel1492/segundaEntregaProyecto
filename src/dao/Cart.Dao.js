@@ -55,7 +55,7 @@ class CartManager {
     async deleteCartProductsId(id, arrayProducts) {
         try {
             const ProductByIdMongo = await Cart.findByIdAndUpdate(id, { products: arrayProducts });
-            return "cart products deleted"
+            return "Cart product deleted"
         }
         catch (error) {
             return error;

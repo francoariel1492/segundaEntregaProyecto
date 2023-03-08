@@ -20,7 +20,13 @@ form.addEventListener('submit', e => {
     method,
     body
   })
-    .then(response => response.json())
+  .then((response) => {
+    if (response.redirected) {
+      window.location.href = response.url;
+    } else {
+      return response.json();
+    }
+  })
     .then(data => console.log(data))
     .catch(error => console.log(error))
 })

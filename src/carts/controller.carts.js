@@ -41,56 +41,66 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/:cid/products/:pid", async (req, res) => {
-  const cartId = req.params.cid;
-  const productId = req.params.pid;
-  const getCartById = await cartManager.getCartById(cartId);
-
-  const verifyExistence = getCartById.products.find(
-    (e) => e.product == productId
-  );
-
-  if (verifyExistence) {
-    const updateCartProducts = await cartManager.postCartProductsId(
-      cartId,
-      productId,
-      true
-    );
-    res.status(200).json({ mesagge: updateCartProducts });
-  } else {
-    const updateCartProducts = await cartManager.postCartProductsId(
-      cartId,
-      productId,
-      false
-    );
-    res.status(200).json({ mesagge: updateCartProducts });
-  }
+    try {
+        const cartId = req.params.cid;
+        const productId = req.params.pid;
+        const getCartById = await cartManager.getCartById(cartId);
+      
+        const verifyExistence = getCartById.products.find(
+          (e) => e.product == productId
+        );
+      
+        if (verifyExistence) {
+          const updateCartProducts = await cartManager.postCartProductsId(
+            cartId,
+            productId,
+            true
+          );
+          res.status(200).json({ mesagge: updateCartProducts });
+        } else {
+          const updateCartProducts = await cartManager.postCartProductsId(
+            cartId,
+            productId,
+            false
+          );
+          res.status(200).json({ mesagge: updateCartProducts });
+        }
+        
+    } catch (error) {
+        res.status(500).json({ message: "Internal server rerror" });
+    }
 });
 
 router.delete("/:cid/products/:pid", async (req, res) => {
-  const cartId = req.params.cid;
-  const productId = req.params.pid;
-  const getCartById = await cartManager.getCartById(cartId);
-  const getProductById = await productManager.getProductById(productId);
-  const productoTitulo = getProductById.title;
-
-  const verifyExistence = getCartById.products.find(
-    (e) => e.product == productId
-  );
-
-  if (verifyExistence === undefined) {
-    res.status(404).json({ mesagge: "not found" });
-  } else {
-    const productsArrayPosition = getCartById.products.findIndex(
-      (item) => item.id === productId
-    );
-    getCartById.products.splice(productsArrayPosition, 1);
-    let newArray = getCartById.products;
-    const deleteCartProducts = await cartManager.deleteCartProductsId(
-      cartId,
-      newArray
-    );
-    res.status(200).json({ mesagge: deleteCartProducts });
-  }
+    try {
+        const cartId = req.params.cid;
+        const productId = req.params.pid;
+        const getCartById = await cartManager.getCartById(cartId);
+        const getProductById = await productManager.getProductById(productId);
+        const productoTitulo = getProductById.title;
+      
+        const verifyExistence = getCartById.products.find(
+          (p) => p.product._id == productId
+        );
+        console.log(verifyExistence)
+        if (verifyExistence === undefined) {
+          res.status(404).json({ mesagge: "not found" });
+        } else {
+          const productsArrayPosition = getCartById.products.findIndex(
+            (item) => item.id === productId
+          );
+          getCartById.products.splice(productsArrayPosition, 1);
+          let newArray = getCartById.products;
+          const deleteCartProducts = await cartManager.deleteCartProductsId(
+            cartId,
+            newArray
+          );
+          res.status(200).json({ mesagge: deleteCartProducts });
+        }
+        
+    } catch (error) {
+        res.status(500).json({ message: "Internal server rerror" });
+    }
 });
 
 router.delete("/:id", async (req, res) => {

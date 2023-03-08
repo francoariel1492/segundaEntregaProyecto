@@ -1,4 +1,11 @@
 const form = document.getElementById("formLogin");
+const registerBtn = document.getElementById("register")
+
+registerBtn.addEventListener("click", () =>{
+  const newPath = window.location.pathname;
+  const newUrl = newPath.replace('/login', '') + '/signup';
+  window.location.href = newUrl;
+})
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();

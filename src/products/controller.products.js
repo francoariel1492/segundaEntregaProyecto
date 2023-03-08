@@ -50,8 +50,8 @@ router.get("/", async (req, res) => {
     };
 
     const { user } = req.session;
-      // res.status(200).render('products', { respuestaInfo, user });
-    res.status(200).json(respuestaInfo);
+      res.status(200).render('products', { respuestaInfo, user });
+    // res.status(200).json(respuestaInfo);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
