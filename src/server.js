@@ -48,3 +48,8 @@ app.listen(port, () => {
   console.log(`listening on ${port}`)
 })
 
+
+
+// PORT=8080
+// USER_DB=admin
+// PASS_DB=admin
