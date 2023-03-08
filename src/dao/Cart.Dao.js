@@ -72,6 +72,11 @@ class CartManager {
         }
     }
 
+    async deleteAll(){
+        await Cart.deleteMany()
+        return "All carts deleted"
+    }
+
     async updateCartProductsId(idCart, idProduct, exist, quantity) {
         try {
             const cart = await Cart.findById(idCart);
@@ -94,9 +99,7 @@ class CartManager {
         try {
             const cart = await Cart.findById(idCart);
             cart.products=products
-
             const response = Cart.findByIdAndUpdate(idCart , cart)
-            //return "cart products updated";
             return response
         }
         catch (error) {

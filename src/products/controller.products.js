@@ -50,8 +50,8 @@ router.get("/", async (req, res) => {
     };
 
     const { user } = req.session;
-      res.status(200).render('products', { respuestaInfo, user });
-    // res.status(200).json(respuestaInfo);
+      // res.status(200).render('products', { respuestaInfo, user });
+    res.status(200).json(respuestaInfo);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -62,7 +62,7 @@ router.get("/:id", async (req, res) => {
     const { id } = req.params;
     const product = await productManager.getProductById(id);
     if (!product) {
-      return res.status(404).json({ message: 'Producto no encontrado'});
+      return res.status(404).json({ message: 'Product not found'});
     }
     res.render("productID", product);
   } catch (error) {
@@ -162,18 +162,29 @@ router.put("/:id", async (req, res) => {
 
 
 router.delete("/:id", async (req, res) => {
-  const productId = req.params.id;
-  const getById = await productManager.deleteById(productId);
-  const products = await productManager.getProducts();
-  res.status(200).json({ mesagge: getById });
+  try {
+    const productId = req.params.id;
+    const result = await productManager.deleteById(productId);
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    res.status(200).json({ message: result });
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 });
 
 
 
+
 router.post("/json", async (req, res) => {
-  const pJson = await filesDao.loadItems();
-  const response = await productManager.addProductsToDB(pJson);
-  res.json({ message: response });
+  try {
+    const pJson = await filesDao.loadItems();
+    const response = await productManager.addProductsToDB(pJson);
+    res.json({ message: response });
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 });
 
 module.exports = router;
