@@ -16,10 +16,5 @@ router.get('/signup', publicAccess, (req, res) => {
   res.render('signup.handlebars')
 })
 
-// router.get('/api/products', publicAccess, (req, res) => {
-//   const { user } = req.session
-//   res.render('products.handlebars', { user })
-// })
-
 
 module.exports = router
