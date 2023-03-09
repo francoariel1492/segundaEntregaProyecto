@@ -1,9 +1,11 @@
 const passport = require("passport");
+require('dotenv').config()
 const local = require("passport-local");
 const User = require("../models/user.model");
 const { createHash, isValidPasswordMethod } = require("../utils/cryptPassword");
-
+const GithubStrategy = require('passport-github2')
 const LocalStrategy = local.Strategy;
+const {clientID, clientSecret} = require('./config.github')
 
 const initializePassport = () => {
   passport.use(
@@ -63,6 +65,32 @@ const initializePassport = () => {
       }
     )
   );
+  passport.use('github', new GithubStrategy({
+    clientID,
+    clientSecret,
+    callbackURL: 'http://localhost:3000/auth/githubcallback'
+  }, async(accessToken, refreshToken, profile, done) => {
+    try {
+      console.log(profile)
+      const user = await User.findOne({email: profile._json.email})
+      if(!user){
+        const newUserInfo = {
+          first_name: profile._json.name,
+          last_name: '',
+          age: 18,
+          email: profile._json.email,
+          password: ''
+        }
+
+        const newUser = await User.create(newUserInfo)
+
+        return done(null,newUser)
+      }
+      done(null, user)
+    } catch (error) {
+      done(error)
+    }
+  }))
 };
 
 module.exports = initializePassport;

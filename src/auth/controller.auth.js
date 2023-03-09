@@ -5,27 +5,46 @@ const { isValidPasswordMethod, createHash } = require("../utils/cryptPassword");
 
 const router = Router();
 
-router.post("/", passport.authenticate('login', {failureRedirect:'failLogin'}),
-async (req, res) => {
-  try {
-    if(!req.user) return res.status(400).json({error: 'Invalid credentials'})
-    req.session.user = {
-      first_name: req.user.first_name,
-      last_name: req.user.last_name,
-      age: req.user.age,
-      email: req.user.email
-    }
+router.post(
+  "/",
+  passport.authenticate("login", { failureRedirect: "failLogin" }),
+  async (req, res) => {
+    try {
+      if (!req.user)
+        return res.status(400).json({ error: "Invalid credentials" });
+      req.session.user = {
+        first_name: req.user.first_name,
+        last_name: req.user.last_name,
+        age: req.user.age,
+        email: req.user.email,
+      };
 
-    res.redirect("/api/products");
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Internal server error" });
+      res.redirect("/api/products");
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: "Internal server error" });
+    }
   }
+);
+
+router.get("/failLogin", (req, res) => {
+  res.json({ error: "Login error" });
 });
 
-router.get('/failLogin', (req,res) =>{
-  res.json({error: "Login error"})
-})
+router.get(
+  "/github",
+  passport.authenticate("github", { scope: ["user:email"] }),
+  async (req, res) => {}
+);
+
+router.get(
+  "/githubcallback",
+  passport.authenticate("github", { failureRedirect: "/login" }),
+  async (req, res) => {
+    req.session.user = req.user;
+    res.redirect("/");
+  }
+);
 
 //OLD WAY WORKING
 // router.post("/", async (req, res) => {
