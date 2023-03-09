@@ -1,4 +1,33 @@
 body{
-    background-color: antiquewhite;
-    color: #E84545;
+    min-height: 100vh;
+    background: rgb(232,69,69);
+    background: radial-gradient(circle, rgba(232,69,69,1) 0%, rgba(43,46,74,1) 75%);
+    color: #2b2e4a;
+    font-size: 1.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.view{
+    color: antiquewhite;
+}
+
+button{
+    margin: 0.5rem;
+}
+
+a{
+    margin: 0.5rem;
 }
