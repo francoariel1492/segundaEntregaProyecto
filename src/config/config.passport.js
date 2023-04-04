@@ -1,11 +1,11 @@
 const passport = require("passport");
-require('dotenv').config()
 const local = require("passport-local");
 const User = require("../models/user.model");
 const { createHash, isValidPasswordMethod } = require("../utils/cryptPassword");
 const GithubStrategy = require('passport-github2')
 const LocalStrategy = local.Strategy;
 const {clientID, clientSecret} = require('./config.github')
+const {port} = require('./config.env')
 
 const initializePassport = () => {
   passport.use(
@@ -53,7 +53,7 @@ const initializePassport = () => {
         try {
           const user = await User.findOne({ email: username });
           if (!user) {
-            console.log("User doent exist");
+            console.log("User doesnt exist");
             return done(null, false);
           }
           if (!isValidPasswordMethod(password, user)) return done(null, false);
@@ -68,10 +68,9 @@ const initializePassport = () => {
   passport.use('github', new GithubStrategy({
     clientID,
     clientSecret,
-    callbackURL: 'http://localhost:3000/auth/githubcallback'
+    callbackURL: `http://localhost:${port}/auth/githubcallback`
   }, async(accessToken, refreshToken, profile, done) => {
     try {
-      console.log(profile)
       const user = await User.findOne({email: profile._json.email})
       if(!user){
         const newUserInfo = {
