@@ -24,6 +24,8 @@ const userSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  phone: String,
+  status: Boolean
 });
 
 

@@ -3,7 +3,7 @@ const morgan = require('morgan');
 const handlebars = require('express-handlebars')
 const cookieParser = require('cookie-parser')
 const handlebarsConfig = require('./config/config.handlebars');
-const mongoConfig = require('./config/config.mongo');
+const mongoConfig = require('./db/index');
 const passport = require('passport');
 const initializePassport = require('./config/config.passport');
 const router = require('./router')
@@ -11,7 +11,7 @@ const router = require('./router')
 const app = express()
 
 mongoConfig(app)
-initializePassport()
+// initializePassport()
 
 
 app.use(express.json())

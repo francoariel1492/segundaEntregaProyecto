@@ -1,4 +1,4 @@
-const Cart = require("../models/carts.model");
+const Cart = require("./mongo/models/carts.model");
 
 class CartManager {
 

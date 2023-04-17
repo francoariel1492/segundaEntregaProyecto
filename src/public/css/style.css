@@ -31,3 +31,11 @@ button{
 a{
     margin: 0.5rem;
 }
+
+.lista{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}

@@ -8,6 +8,7 @@ router.get('/', privateAccess, (req, res) => {
   res.render('profile.handlebars', { user })
 })
 
+
 router.get('/login', publicAccess, (req, res) => {
   res.render('login.handlebars')
 })
